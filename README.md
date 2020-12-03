@@ -7,14 +7,23 @@ a back-end code of a project, using SpringBoot
 - and detect the changes of files in folders in the server in real time
 
 VoiceCare
+
 ├── controller-UserController -- 用户信息管理接口
+
 ├── controller-AudioController -- 与音频相关的听新闻、对话接口
+
 ├── model -- 用户信息、音频类、json封装类
+
 ├── service-UserService -- 用户信息管理业务逻辑实现类
+
 ├── service-AudioService -- 音频服务实现类
+
 ├── utils -- 登录验证JWT、封装Json工具类
+
 ├── interceptor-LoginInterceptor -- 拦截器工具类
+
 ├── config -- 配置类
+
 └── mapper -- MyBatis数据库操作代码
 
 后端技术：
