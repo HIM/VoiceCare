@@ -34,7 +34,6 @@ public class UploadTest {
         return JsonData.buildSuccess("我收到了id!!!");
     }
 
-
     /**
      * 接受未知参数名的多个文件或者一个文件
      *
