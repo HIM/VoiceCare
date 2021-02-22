@@ -2,6 +2,8 @@ package voiceCare.controller;
 
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sun.misc.IOUtils;
 import voiceCare.config.ListenFile;
 import voiceCare.model.entity.BaiduAudio.BaiduRequest;
@@ -23,8 +25,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static voiceCare.utils.BaiduAccessToken.getAuth;
 
@@ -221,5 +222,6 @@ public class UserController {
 
         return null;
     }
+    
 
 }

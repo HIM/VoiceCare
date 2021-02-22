@@ -21,6 +21,7 @@ import com.baidu.aip.speech.AipSpeech;
 import com.baidu.aip.speech.TtsResponse;
 import com.baidu.aip.util.Util;
 
+import java.io.File;
 import java.io.IOException;
 
 import java.util.concurrent.TimeUnit;
@@ -134,6 +135,16 @@ public class AudioServiceImpl implements AudioService {
         return "F:\\WangChen2628\\IDEA\\VoiceCare\\output.mp3";
     }
 
+    @Override
+    public void fileDir(String name) {
+        File file = new File("C:\\Audio\\"+name);
+        if(!file.exists() && !file.isDirectory()){
+            System.out.println(name+"文件夹不存在，创建该文件夹");
+            file.mkdir();
+        }else{
+            System.out.println(name+"该文件夹存在");
+        }
+    }
 
 
     public String getTextValue(String res) {

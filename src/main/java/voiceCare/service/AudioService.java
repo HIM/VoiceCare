@@ -10,4 +10,6 @@ public interface AudioService {
     String word2word(String audio_word_result);
 
     String word2Audio(String turing_word_result);
+
+    void fileDir(String name);
 }
