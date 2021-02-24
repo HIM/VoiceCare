@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import voiceCare.config.ListenFile;
+import voiceCare.model.entity.Exid;
 import voiceCare.model.entity.User;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
@@ -54,15 +55,15 @@ public class UserController {
     public JsonData login(@RequestBody LoginRequest loginRequest){
 
         String token = userService.findByPhoneAndPwd(loginRequest.getPhone(), loginRequest.getPwd());
-
-        return token == null ?JsonData.buildError("登录失败，账号密码错误"): JsonData.buildSuccess(token);
-
+        int id = userService.findIdByPhone(loginRequest.getPhone());
+        User user =  userService.findByUserId(id);
+        user.setToken(token);
+        user_s = user;
+//        return token == null ?JsonData.buildError("登录失败，账号密码错误"): JsonData.buildSuccess(token);
+        return JsonData.buildSuccess(user);
     }
 
     public static User user_s;
-    public static User getUser(){
-        return user_s;
-    }
 
     /**
      * 根据用户id查询用户信息
@@ -82,7 +83,6 @@ public class UserController {
         user_s = user;
 
         return JsonData.buildSuccess(user);
-
     }
 
     /**
@@ -278,5 +278,19 @@ public class UserController {
         return jsonObject;
     }
 
+    @RequestMapping("exchange")
+    public JsonData exchangeVoice(@RequestBody Exid exid, HttpServletRequest request){
+
+        int id = exid.getId();
+        Integer userId = (Integer) request.getAttribute("user_id");
+        System.out.println("post传过来是："+id);
+        System.out.println("request查到的是："+userId);
+        if(userId == null){
+            return JsonData.buildError("查询失败");
+        }
+        userService.exchangeToneId(id, userId);
+
+        return JsonData.buildSuccess();
+    }
 
 }

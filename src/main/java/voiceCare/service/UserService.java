@@ -22,5 +22,9 @@ public interface UserService {
 
     int create(Map<String, String> familyIdObj);
 
+    void exchangeToneId(int id, Integer userId);
+
+    int findIdByPhone(String phone);
+
 //    String findAudioUrlByUserId(Integer userId);
 }

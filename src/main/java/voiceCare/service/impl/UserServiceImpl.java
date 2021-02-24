@@ -75,6 +75,16 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public void exchangeToneId(int id, Integer userId) {
+        userMapper.exchangeToneId(id, userId);
+    }
+
+    @Override
+    public int findIdByPhone(String phone) {
+        return userMapper.findIdByPhone(phone);
+    }
+
 //    @Override
 //    public String findAudioUrlByUserId(Integer userId) {
 //

@@ -21,4 +21,7 @@ public interface UserMapper {
 
     int createFamily(User user);
 
+    void exchangeToneId(@Param("post_id") int id, @Param("user_id") Integer userId);
+
+    int findIdByPhone(@Param("phone") String phone);
 }

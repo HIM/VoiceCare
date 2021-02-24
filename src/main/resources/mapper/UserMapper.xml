@@ -35,9 +35,11 @@
         update user set family_id=#{familyId} where phone=#{phone}
     </update>
 
-<!--    <select id="findAudioUrlByUserId" resultType="String">-->
+    <update id="exchangeToneId">
+        update user set tone_id=#{post_id} where id=#{user_id}
+    </update>
 
-<!--        select audio_url from user where id=#{user_id}-->
-
-<!--    </select>-->
+    <select id="findIdByPhone" resultType="Integer">
+        select id from user where phone=#{phone}
+    </select>
 </mapper>
