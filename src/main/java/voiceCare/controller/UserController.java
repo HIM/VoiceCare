@@ -6,7 +6,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import voiceCare.config.ListenFile;
-import voiceCare.model.entity.BaiduAudio.BaiduRequest;
 import voiceCare.model.entity.User;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
@@ -40,6 +39,7 @@ public class UserController {
     public JsonData register(@RequestBody Map<String,String> userInfo ){
 
         int rows = userService.save(userInfo);
+
 
         return rows == 1 ? JsonData.buildSuccess(): JsonData.buildError("注册失败，请重试");
 
@@ -93,12 +93,13 @@ public class UserController {
     public JsonData findUserListByFamilyId(HttpServletRequest request){
 
         String familyId = (String) request.getAttribute("family_id");
+        Integer userId = (Integer) request.getAttribute("user_id");
 
         if(familyId == null){
             return JsonData.buildError("查询失败");
         }
 
-        List<User> userList = userService.findListFamily(familyId);
+        List<User> userList = userService.findListFamily(familyId,userId);
 
         return JsonData.buildSuccess(userList);
     }

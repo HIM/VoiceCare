@@ -45,12 +45,16 @@ public class LoginInterceptor implements HandlerInterceptor {
                 String familyId = (String) claims.get("family_id");
                 String headImg = (String) claims.get("head_img");
                 String audioUrl = (String) claims.get("audio_url");
+                String recordAud = (String) claims.get("record_aud");
+                Integer toneId = (Integer) claims.get("tone_id");
 
                 request.setAttribute("user_id", id);
                 request.setAttribute("name", name);
                 request.setAttribute("family_id",familyId);
                 request.setAttribute("head_img",headImg);
                 request.setAttribute("audio_url",audioUrl);
+                request.setAttribute("record_aud",recordAud);
+                request.setAttribute("tone_id",toneId);
 
                 return true;
 

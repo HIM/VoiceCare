@@ -17,9 +17,8 @@ public interface UserMapper {
 
     User findByUserId(@Param("user_id") Integer userId);
 
-    List<User> findListFamily(@Param("family_id") String familyId);
+    List<User> findListFamily(@Param("family_id") String familyId, @Param("user_id") Integer userId);
 
     int createFamily(User user);
 
-//    String findAudioUrlByUserId(@Param("user_id") Integer userId);
 }

@@ -20,8 +20,7 @@ import static voiceCare.utils.BaiduAccessToken.getAuth;
 @RestController
 @RequestMapping("api/v1/pub/audio")
 public class AudioController {
-    @Autowired
-    private AudioService audioService;
+
     @Autowired
     private UserService userService;
 

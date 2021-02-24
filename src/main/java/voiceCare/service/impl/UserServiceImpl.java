@@ -57,9 +57,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findListFamily(String familyId) {
+    public List<User> findListFamily(String familyId, int userId) {
 
-        return userMapper.findListFamily(familyId);
+        return userMapper.findListFamily(familyId, userId);
     }
 
     @Override

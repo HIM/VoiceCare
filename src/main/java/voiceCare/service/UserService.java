@@ -18,7 +18,7 @@ public interface UserService {
 
     User findByUserId(Integer userId);
 
-    List<User> findListFamily(String familyId);
+    List<User> findListFamily(String familyId,int userId);
 
     int create(Map<String, String> familyIdObj);
 

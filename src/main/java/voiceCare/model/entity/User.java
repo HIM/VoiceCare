@@ -38,6 +38,26 @@ public class User {
     @JsonProperty("audio_url")
     private String audioUrl;
 
+    private String recordAud;
+
+    private int toneId;
+
+    public String getRecordAud() {
+        return recordAud;
+    }
+
+    public void setRecordAud(String recordAud) {
+        this.recordAud = recordAud;
+    }
+
+    public int getToneId() {
+        return toneId;
+    }
+
+    public void setToneId(int toneId) {
+        this.toneId = toneId;
+    }
+
     public String getAudioUrl() {
         return audioUrl;
     }
@@ -102,17 +122,5 @@ public class User {
         this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", headImg='" + headImg + '\'' +
-                ", phone='" + phone + '\'' +
-                ", createTime=" + createTime +
-                ", familyId='" + familyId + '\'' +
-                ", audioUrl='" + audioUrl + '\'' +
-                '}';
-    }
+
 }

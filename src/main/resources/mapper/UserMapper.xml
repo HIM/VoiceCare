@@ -5,8 +5,8 @@
     <!--注册，insert；values取User对象的属性-->
     <insert id="save" parameterType="User">
 
-        INSERT  INTO user (name, pwd, head_img, phone , create_time, family_id)
-        values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{headImg,jdbcType=VARCHAR},
+        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
+        values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 0, #{headImg,jdbcType=VARCHAR},
         #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{familyId,jdbcType=VARCHAR})
 
     </insert>
@@ -27,7 +27,7 @@
 
     <select id="findListFamily" resultType="User">
 
-        select * from user where family_id=#{family_id} order by create_time desc
+        select * from user where id != #{user_id} AND family_id=#{family_id} order by create_time desc
 
     </select>
 
