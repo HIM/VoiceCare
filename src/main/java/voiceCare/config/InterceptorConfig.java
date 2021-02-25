@@ -1,5 +1,6 @@
 package voiceCare.config;
 
+import voiceCare.interceptor.CorsInterceptor;
 import voiceCare.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
 
+    @Bean
+    CorsInterceptor corsInterceptor() {
+        return new CorsInterceptor();
+    }
 
     @Bean
     LoginInterceptor loginInterceptor(){

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="voiceCare.mapper.ClockMapper">
+
+    <!--添加新提醒闹钟，insert；values取User对象的属性-->
+    <insert id="save" parameterType="Clock">
+
+        INSERT  INTO clock (user_id, time, state, comment, create_time)
+        values (#{user_id,jdbcType=INTEGER}, #{time,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR},
+        #{comment,jdbcType=VARCHAR},#{create_time,jdbcType=VARCHAR})
+
+    </insert>
+
+    <update id="update" parameterType="Clock">
+        UPDATE clock SET time=#{time}, state=#{state}, comment=#{comment} WHERE user_id=#{user_id} AND create_time=#{create_time}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM clock WHERE user_id=#{id} AND create_time=#{createTime}
+    </delete>
+
+</mapper>

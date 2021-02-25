@@ -19,7 +19,7 @@ public class ListenFile implements ApplicationRunner {
         //项目启动后执行的方法
         @Override
         public void run(ApplicationArguments applicationArguments) throws Exception {
-            getFile();
+            getFile();//监听新增文件
         }
 
         private static String path = "F:\\WangChen2628\\IDEA";

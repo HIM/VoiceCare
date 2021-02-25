@@ -1,15 +1,18 @@
 package voiceCare.controller;
 
+import io.swagger.models.auth.In;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import voiceCare.config.ListenFile;
+import voiceCare.model.entity.Clock;
 import voiceCare.model.entity.Exid;
 import voiceCare.model.entity.User;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
+import voiceCare.service.ClockService;
 import voiceCare.service.UserService;
 import voiceCare.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +30,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private AudioService audioService;
+    @Autowired
+    private ClockService clockService;
 
     /**
      * 注册接口
@@ -278,6 +282,12 @@ public class UserController {
         return jsonObject;
     }
 
+    /**
+     * 修改音色
+     * @param exid
+     * @param request
+     * @return
+     */
     @RequestMapping("exchange")
     public JsonData exchangeVoice(@RequestBody Exid exid, HttpServletRequest request){
 
@@ -291,6 +301,48 @@ public class UserController {
         userService.exchangeToneId(id, userId);
 
         return JsonData.buildSuccess();
+    }
+
+    /**
+     * 添加提醒（闹钟）
+     * @param clock
+     * @param request
+     * @return
+     */
+    @RequestMapping("add_clock")
+    public JsonData addClock(@RequestBody Clock clock, HttpServletRequest request){
+        Integer id = (Integer)request.getAttribute("user_id");
+        clock.setUser_id(id);
+        int rows = clockService.save(clock);
+        return rows == 1?JsonData.buildSuccess():JsonData.buildError("新提醒添加失败");
+    }
+
+    /**
+     * 修改提醒
+     * @param clock
+     * @param request
+     * @return
+     */
+    @RequestMapping("update_clock")
+    public JsonData updateClock(@RequestBody Clock clock, HttpServletRequest request){
+        Integer id = (Integer)request.getAttribute("user_id");
+        clock.setUser_id(id);
+        int rows = clockService.update(clock);
+        return rows == 1?JsonData.buildSuccess():JsonData.buildError("提醒修改失败");
+    }
+
+    /**
+     * 删除提醒
+     * @param clock
+     * @param request
+     * @return
+     */
+    @RequestMapping("delete_clock")
+    public JsonData deleteClock(@RequestBody Clock clock, HttpServletRequest request){
+        Integer id = (Integer)request.getAttribute("user_id");
+        String createTime = clock.getCreate_time();
+        int rows = clockService.delete(id, createTime);
+        return rows == 1?JsonData.buildSuccess():JsonData.buildError("提醒修改失败");
     }
 
 }
