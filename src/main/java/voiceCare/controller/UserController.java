@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import voiceCare.config.ListenFile;
 import voiceCare.model.entity.Clock;
 import voiceCare.model.entity.Exid;
+import voiceCare.model.entity.ToneJson;
 import voiceCare.model.entity.User;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
@@ -132,15 +133,19 @@ public class UserController {
     }
 
     @GetMapping("audioplay")
-    public String getAudio(HttpServletRequest request, HttpServletResponse response)
-    {
+    public String getAudio(HttpServletRequest request, HttpServletResponse response) {
         Integer userId = (Integer) request.getAttribute("user_id");
-/*
+
         System.out.println("start ------------------------- ");
         String url = "http://127.0.0.1:80/bofang";
         HttpMethod method = HttpMethod.POST;
-        BaiduRequest baiduRequest = new BaiduRequest();
-        String jsonRequest = JSONObject.toJSONString(baiduRequest);
+
+        ToneJson toneJson = new ToneJson();
+        toneJson.setId((Integer)request.getAttribute("user_id"));
+        toneJson.setTone_id((Integer)request.getAttribute("tone_id"));
+        System.out.println("user_id: "+(Integer)request.getAttribute("user_id")+" ,tone_id: "+(Integer)request.getAttribute("tone_id"));
+        String jsonRequest = JSONObject.toJSONString(toneJson);
+        System.out.println("当前给python："+jsonRequest);
         JSONObject postData = JSONObject.parseObject(jsonRequest);  //请求json
 
         try {
@@ -149,14 +154,10 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
 
         User user =  userService.findByUserId(userId);
         String audioUrl = user.getAudioUrl();
         System.out.println("audioUrl= "+audioUrl);
-
-//        String audiourl = "";
-//        audiourl = userService.findAudioUrlByUserId(userId);
 
         try {
             FileInputStream fis = null;
@@ -312,7 +313,7 @@ public class UserController {
     @RequestMapping("add_clock")
     public JsonData addClock(@RequestBody Clock clock, HttpServletRequest request){
         Integer id = (Integer)request.getAttribute("user_id");
-        clock.setUser_id(id);
+        clock.setUserId(id);
         int rows = clockService.save(clock);
         return rows == 1?JsonData.buildSuccess():JsonData.buildError("新提醒添加失败");
     }
@@ -326,7 +327,7 @@ public class UserController {
     @RequestMapping("update_clock")
     public JsonData updateClock(@RequestBody Clock clock, HttpServletRequest request){
         Integer id = (Integer)request.getAttribute("user_id");
-        clock.setUser_id(id);
+        clock.setUserId(id);
         int rows = clockService.update(clock);
         return rows == 1?JsonData.buildSuccess():JsonData.buildError("提醒修改失败");
     }
@@ -340,9 +341,24 @@ public class UserController {
     @RequestMapping("delete_clock")
     public JsonData deleteClock(@RequestBody Clock clock, HttpServletRequest request){
         Integer id = (Integer)request.getAttribute("user_id");
-        String createTime = clock.getCreate_time();
+        String createTime = clock.getCreateTime();
         int rows = clockService.delete(id, createTime);
         return rows == 1?JsonData.buildSuccess():JsonData.buildError("提醒修改失败");
     }
 
+    /**
+     * 展示所有提醒
+     * @param request
+     * @return
+     */
+    @RequestMapping("show_clocks")
+    public JsonData showClocks(HttpServletRequest request){
+        Integer id = (Integer)request.getAttribute("user_id");
+        if(id == null){
+            return JsonData.buildError("查询失败");
+        }
+        List<Clock> clocks = clockService.showClocks(id);
+        System.out.println(clocks.toString());
+        return JsonData.buildSuccess(clocks);
+    }
 }

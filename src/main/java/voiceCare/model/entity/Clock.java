@@ -1,18 +1,26 @@
 package voiceCare.model.entity;
 
 public class Clock {
-    private int user_id;
+    private int userId;
     private String time;
-    private String state;
+    private int state;
     private String comment;
-    private String create_time;
+    private String createTime;
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getTime() {
@@ -23,11 +31,11 @@ public class Clock {
         this.time = time;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 
@@ -39,11 +47,14 @@ public class Clock {
         this.comment = comment;
     }
 
-    public String getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(String create_time) {
-        this.create_time = create_time;
+    @Override
+    public String toString() {
+        return "Clock{" +
+                "userId=" + userId +
+                ", time='" + time + '\'' +
+                ", state=" + state +
+                ", comment='" + comment + '\'' +
+                ", createTime='" + createTime + '\'' +
+                '}';
     }
 }

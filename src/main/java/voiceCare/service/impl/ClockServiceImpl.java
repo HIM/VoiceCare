@@ -8,6 +8,7 @@ import voiceCare.service.ClockService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ClockServiceImpl implements ClockService {
@@ -17,7 +18,7 @@ public class ClockServiceImpl implements ClockService {
     @Override
     public int save(Clock clock) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        clock.setCreate_time(df.format(new Date()));
+        clock.setCreateTime(df.format(new Date()));
         return clockMapper.save(clock);
     }
 
@@ -29,5 +30,10 @@ public class ClockServiceImpl implements ClockService {
     @Override
     public int delete(Integer id, String createTime) {
         return clockMapper.delete(id, createTime);
+    }
+
+    @Override
+    public List<Clock> showClocks(Integer id) {
+        return clockMapper.showClocks(id);
     }
 }

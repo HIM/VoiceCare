@@ -54,6 +54,7 @@ public class JWTUtils {
                 .claim("name",user.getName())
                 .claim("family_id",user.getFamilyId())
                 .claim("head_img",user.getHeadImg())
+                .claim("tone_id",user.getToneId())
                 .setIssuedAt(new Date())//设置下发时间
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE))//设置过期时间
                 .signWith(SignatureAlgorithm.HS256,SECRET).compact();//设置签名，加密方式HS256，密钥SECRET
