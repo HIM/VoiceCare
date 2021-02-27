@@ -85,12 +85,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.findIdByPhone(phone);
     }
 
-//    @Override
-//    public String findAudioUrlByUserId(Integer userId) {
-//
-//        String url = userMapper.findAudioUrlByUserId(userId);
-//        return url;
-//    }
 
     /**
      * 新建的familyId给临时的User

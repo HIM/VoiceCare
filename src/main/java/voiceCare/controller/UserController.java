@@ -132,6 +132,12 @@ public class UserController {
         return response.getBody();
     }
 
+    /**
+     * 播放新闻
+     * @param request
+     * @param response
+     * @return
+     */
     @GetMapping("audioplay")
     public String getAudio(HttpServletRequest request, HttpServletResponse response) {
         Integer userId = (Integer) request.getAttribute("user_id");
@@ -361,4 +367,5 @@ public class UserController {
         System.out.println(clocks.toString());
         return JsonData.buildSuccess(clocks);
     }
+
 }

@@ -44,6 +44,13 @@ public class User {
 
     private String token;
 
+    public User() {
+    }
+
+    public User(int id){
+        this.id = id;
+    }
+
     public String getToken() {
         return token;
     }

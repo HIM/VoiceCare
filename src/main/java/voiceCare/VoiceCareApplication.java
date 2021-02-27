@@ -3,9 +3,11 @@ package voiceCare;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import voiceCare.controller.WebSocketServer;
 
 @SpringBootApplication
 @MapperScan("voiceCare.mapper")
@@ -14,7 +16,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class VoiceCareApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(VoiceCareApplication.class, args);
+
 	}
 
 }

@@ -1,5 +1,6 @@
 package voiceCare.controller;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,14 +14,32 @@ import javax.websocket.server.ServerEndpoint;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
-import javax.websocket.server.ServerEndpoint;
+import voiceCare.model.entity.ToneJson;
+import voiceCare.service.Scheduler;
 
 @ServerEndpoint("/imserver/{userId}")
 @Component
+//@Controller
 public class WebSocketServer {
+
+    public static Scheduler scheduler;
+//    @Autowired
+//    public static void setScheduler(Scheduler scheduler){
+//        WebSocketServer.scheduler = scheduler;
+//    }
+
+//    private Scheduler scheduler = (Scheduler) WebSocketApplicationContextAware.getApplicationContext().getBean("Scheduler");
+
+//    private static ApplicationContext applicationContext;
+//    private Scheduler scheduler;
+//    public static void setApplicationContext(ApplicationContext applicationContext) {
+//        WebSocketServer.applicationContext = applicationContext;
+//    }
+
+//    ContextLoader.getCurrentWeb
+
     static Log log=LogFactory.get(WebSocketServer.class);
     /**静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。*/
     private static int onlineCount = 0;
@@ -37,12 +56,35 @@ public class WebSocketServer {
     public void onOpen(Session session,@PathParam("userId") String userId) {
         this.session = session;
         this.userId=userId;
+        String url = "http://localhost:8089/api/v1/clock/websocket_update";
+        HttpMethod method = HttpMethod.POST;
+
+        ToneJson toneJson = new ToneJson();
+        toneJson.setId(Integer.parseInt(userId));
+        String jsonRequest = JSONObject.toJSONString(toneJson);
+        System.out.println("jsonRequest: "+jsonRequest);
+        JSONObject postData = JSONObject.parseObject(jsonRequest);
+//        scheduler = applicationContext.getBean(Scheduler.class);
+        try {
+            String result = UserController.HttpRestClient(url, method,postData);
+            System.out.println("result= "+ result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         if(webSocketMap.containsKey(userId)){
             webSocketMap.remove(userId);
             webSocketMap.put(userId,this);
             //加入set中
         }else{
             webSocketMap.put(userId,this);
+
+
+
+//            scheduler.savaUser(Integer.parseInt(userId));
+
+
+
             //加入set中
             addOnlineCount();
             //在线数加1

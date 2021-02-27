@@ -19,4 +19,12 @@ public class ToneJson {
     public void setTone_id(int tone_id) {
         this.tone_id = tone_id;
     }
+
+    @Override
+    public String toString() {
+        return "ToneJson{" +
+                "id=" + id +
+                ", tone_id=" + tone_id +
+                '}';
+    }
 }
