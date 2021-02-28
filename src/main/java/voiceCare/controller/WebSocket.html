@@ -19,6 +19,8 @@
             // var socketUrl="http://8.131.246.100:8086/imserver/"+$("#userId").val();
             socketUrl=socketUrl.replace("https","ws").replace("http","ws");
             console.log(socketUrl);
+
+
             if(socket!=null){
                 socket.close();
                 socket=null;

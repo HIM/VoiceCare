@@ -20,4 +20,20 @@
     <select id="showClocks" resultType="Clock">
         SELECT * FROM clock WHERE user_id=#{userId} order by time asc
     </select>
+
+    <update id="loginInState">
+        UPDATE user SET state='1' WHERE id=#{id}
+    </update>
+
+    <update id="quitState">
+        UPDATE user SET state='0' WHERE id=#{id}
+    </update>
+
+    <select id="findLoginUser" resultType="User">
+        SELECT * FROM user WHERE state='1'
+    </select>
+
+    <select id="findLoginUserClock" resultType="Clock">
+        SELECT * FROM clock WHERE user_id=#{id}
+    </select>
 </mapper>

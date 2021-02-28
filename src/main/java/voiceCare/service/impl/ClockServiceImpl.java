@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import voiceCare.mapper.ClockMapper;
 import voiceCare.model.entity.Clock;
+import voiceCare.model.entity.User;
 import voiceCare.service.ClockService;
 
 import java.text.SimpleDateFormat;
@@ -36,4 +37,25 @@ public class ClockServiceImpl implements ClockService {
     public List<Clock> showClocks(Integer id) {
         return clockMapper.showClocks(id);
     }
+
+    @Override
+    public void loginInState(int id) {
+        clockMapper.loginInState(id);
+    }
+
+    @Override
+    public void quitState(int id) {
+        clockMapper.quitState(id);
+    }
+
+    @Override
+    public List<User> findLoginUser() {
+        return clockMapper.findLoginUser();
+    }
+
+    @Override
+    public List<Clock> findLoginUserClock(Integer id) {
+        return clockMapper.findLoginUserClock(id);
+    }
+
 }
