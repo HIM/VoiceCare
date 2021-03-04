@@ -1,7 +1,7 @@
 package voiceCare.exception;
 
 /**
- * 小滴课堂
+ *
  * 自定义异常类
  */
 public class XDException extends RuntimeException{

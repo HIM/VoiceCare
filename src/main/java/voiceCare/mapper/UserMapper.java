@@ -24,4 +24,6 @@ public interface UserMapper {
     void exchangeToneId(@Param("post_id") int id, @Param("user_id") Integer userId);
 
     int findIdByPhone(@Param("phone") String phone);
+
+    void uploadHeadImgUrl(@Param("id") int id, @Param("img_url") String headImgUrl);
 }

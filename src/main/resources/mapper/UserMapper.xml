@@ -42,4 +42,8 @@
     <select id="findIdByPhone" resultType="Integer">
         select id from user where phone=#{phone}
     </select>
+
+    <update id="uploadHeadImgUrl" >
+        update user set head_img=#{img_url} where id=#{id}
+    </update>
 </mapper>

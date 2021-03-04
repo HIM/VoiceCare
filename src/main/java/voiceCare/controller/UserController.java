@@ -250,7 +250,9 @@ public class UserController {
     public JSONObject handleFileUpload(HttpServletRequest request) {
         Iterator<String> fileNames = ((MultipartHttpServletRequest) request).getFileNames();
         JSONObject result = null;
-        int user_id = user_s.getId();
+//        int user_id = user_s.getId();
+        int user_id = (Integer) request.getAttribute("user_id");
+        System.out.println("从token中获取Id为："+user_id);
         while (fileNames.hasNext()) {
             String next = fileNames.next();
             MultipartFile file = ((MultipartHttpServletRequest) request).getFile(next);
@@ -283,11 +285,9 @@ public class UserController {
 
             jsonObject.put("result", result);
         }
-
-        System.out.println("当前上传用户名：" + request.getAttribute("name"));
-
         return jsonObject;
     }
+
 
     /**
      * 修改音色
@@ -367,5 +367,6 @@ public class UserController {
         System.out.println(clocks.toString());
         return JsonData.buildSuccess(clocks);
     }
+
 
 }

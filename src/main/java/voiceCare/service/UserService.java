@@ -26,5 +26,7 @@ public interface UserService {
 
     int findIdByPhone(String phone);
 
+    void uploadHeadImgUrl(int id, String headImgUrl);
+
 //    String findAudioUrlByUserId(Integer userId);
 }

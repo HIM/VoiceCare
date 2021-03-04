@@ -39,6 +39,7 @@ public class Scheduler {
                      * params: nowTime, clock
                      * return: boolean
                      * 判断当前时间和闹钟所定时间是否相等，若相等，则返回true
+                     * String encoderString = URLEncoder.encode(testString, "utf-8");  //修改编码格式
                      */
                     if(nowTime.equals(clock.getTime()) && !nowTime.equals(time) && clock.getState() == 1){
                         time = nowTime;

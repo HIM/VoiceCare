@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.findIdByPhone(phone);
     }
 
+    @Override
+    public void uploadHeadImgUrl(int id, String headImgUrl) {
+        userMapper.uploadHeadImgUrl(id, headImgUrl);
+    }
+
 
     /**
      * 新建的familyId给临时的User
