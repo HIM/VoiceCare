@@ -7,10 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import voiceCare.config.ListenFile;
-import voiceCare.model.entity.Clock;
-import voiceCare.model.entity.Exid;
-import voiceCare.model.entity.ToneJson;
-import voiceCare.model.entity.User;
+import voiceCare.model.entity.*;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
 import voiceCare.service.ClockService;
@@ -113,10 +110,10 @@ public class UserController {
      * 创建家庭
      * @return
      */
-    @PostMapping("create")
-    public JsonData createFamily(@RequestBody Map<String,String> familyIdObj){
-        int rows = userService.create(familyIdObj);
-        return rows == 1 ? JsonData.buildSuccess(): JsonData.buildError("注册失败，请重试");
+    @PostMapping("create_family")
+    public JsonData createFamily(@RequestBody Family family, HttpServletRequest request){
+        String familyId = userService.createFamily(family.getFamilyName(), (Integer)request.getAttribute("user_id"));
+        return JsonData.buildSuccess(familyId);
     }
 
     public static String HttpRestClient(String url, HttpMethod method, JSONObject json) throws IOException {

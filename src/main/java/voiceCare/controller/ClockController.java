@@ -23,11 +23,11 @@ public class ClockController {
         clockService.loginInState(id);
 
 
-        try {
-            WebSocketServer.sendInfo("controller已经知道你登录了",String.valueOf(id));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            WebSocketServer.sendInfo("controller已经知道你登录了",String.valueOf(id));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return JsonData.buildSuccess("调用成功");
     }
 

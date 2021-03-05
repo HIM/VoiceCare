@@ -19,11 +19,13 @@ public interface UserMapper {
 
     List<User> findListFamily(@Param("family_id") String familyId, @Param("user_id") Integer userId);
 
-    int createFamily(User user);
-
     void exchangeToneId(@Param("post_id") int id, @Param("user_id") Integer userId);
 
     int findIdByPhone(@Param("phone") String phone);
 
     void uploadHeadImgUrl(@Param("id") int id, @Param("img_url") String headImgUrl);
+
+    int createFamily(@Param("fid") String familyId, @Param("fname") String familyName, @Param("uid") Integer user_id);
+
+    void updateFamily(@Param("fid") String familyId, @Param("uid") Integer user_id);
 }

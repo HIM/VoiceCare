@@ -5,9 +5,9 @@
     <!--注册，insert；values取User对象的属性-->
     <insert id="save" parameterType="User">
 
-        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
+        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time)
         values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 0, #{headImg,jdbcType=VARCHAR},
-        #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{familyId,jdbcType=VARCHAR})
+        #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
 
     </insert>
 
@@ -27,13 +27,10 @@
 
     <select id="findListFamily" resultType="User">
 
-        select * from user where id != #{user_id} AND family_id=#{family_id} order by create_time desc
+        select * from user where family_id=#{family_id} order by create_time desc
 
     </select>
 
-    <update id="createFamily" parameterType="User">
-        update user set family_id=#{familyId} where phone=#{phone}
-    </update>
 
     <update id="exchangeToneId">
         update user set tone_id=#{post_id} where id=#{user_id}
@@ -45,5 +42,13 @@
 
     <update id="uploadHeadImgUrl" >
         update user set head_img=#{img_url} where id=#{id}
+    </update>
+
+    <insert id="createFamily">
+        INSERT INTO family VALUES (#{fid}, #{fname})
+    </insert>
+
+    <update id="updateFamily" >
+        UPDATE user set family_id=#{fid} WHERE id=#{uid}
     </update>
 </mapper>

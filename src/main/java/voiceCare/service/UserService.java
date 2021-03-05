@@ -20,7 +20,6 @@ public interface UserService {
 
     List<User> findListFamily(String familyId,int userId);
 
-    int create(Map<String, String> familyIdObj);
 
     void exchangeToneId(int id, Integer userId);
 
@@ -28,5 +27,6 @@ public interface UserService {
 
     void uploadHeadImgUrl(int id, String headImgUrl);
 
-//    String findAudioUrlByUserId(Integer userId);
+    String createFamily(String familyName, Integer user_id);
+
 }
