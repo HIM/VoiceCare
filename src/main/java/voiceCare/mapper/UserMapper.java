@@ -1,6 +1,7 @@
 package voiceCare.mapper;
 
 import io.swagger.models.auth.In;
+import voiceCare.model.entity.Family;
 import voiceCare.model.entity.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,11 +26,17 @@ public interface UserMapper {
 
     void uploadHeadImgUrl(@Param("id") int id, @Param("img_url") String headImgUrl);
 
-    int createFamily(@Param("fid") String familyId, @Param("fname") String familyName, @Param("uid") Integer user_id);
+    int createFamily(@Param("fid") String familyId, @Param("fname") String familyName);
 
     void updateFamily(@Param("fid") String familyId, @Param("uid") Integer user_id);
 
     int getToneId(@Param("id") int id);
 
     void setStateOn(@Param("id") Integer id);
+
+    Family findFamilyExist(@Param("fid") String familyId);
+
+    void joinFamily(@Param("fid") String familyId, @Param("uid") int id);
+
+    String getFamilyId(@Param("uid") int id);
 }

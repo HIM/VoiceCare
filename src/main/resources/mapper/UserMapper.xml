@@ -4,31 +4,23 @@
 
     <!--注册，insert；values取User对象的属性-->
     <insert id="save" parameterType="User">
-
-        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time)
+        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
         values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 0, #{headImg,jdbcType=VARCHAR},
-        #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
-
+        #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},'0')
     </insert>
 
 
     <!--根据手机号和密码找用户-->
     <select id="findByPhoneAndPwd" resultType="User">
-
         select  * from user where phone =#{phone} and pwd = #{pwd}
-
     </select>
 
     <select id="findByUserId" resultType="User">
-
       select  * from user where id=#{user_id}
-
     </select>
 
     <select id="findListFamily" resultType="User">
-
         select * from user where family_id=#{family_id} order by create_time desc
-
     </select>
 
 
@@ -59,4 +51,16 @@
     <update id="setStateOn">
         UPDATE user SET state='1' WHERE id=#{id}
     </update>
+
+    <select id="findFamilyExist" resultType="Family">
+        SELECT * FROM family WHERE family_id=#{fid}
+    </select>
+    
+    <update id="joinFamily">
+        UPDATE user SET family_id=#{fid} WHERE id=#{uid}
+    </update>
+
+    <select id="getFamilyId" resultType="String">
+        SELECT family_id FROM user WHERE id=#{uid}
+    </select>
 </mapper>

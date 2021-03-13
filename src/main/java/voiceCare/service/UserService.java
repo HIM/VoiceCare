@@ -32,4 +32,10 @@ public interface UserService {
     int getToneId(int id);
 
     void setStateOn(Integer id);
+
+    int findFamilyIdExist(String familyId);
+
+    void joinFamily(String familyId, int id);
+
+    String getFamilyId(int id);
 }

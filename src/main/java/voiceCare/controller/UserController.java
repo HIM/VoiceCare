@@ -11,6 +11,7 @@ import voiceCare.model.entity.*;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
 import voiceCare.service.ClockService;
+import voiceCare.service.NewsService;
 import voiceCare.service.UserService;
 import voiceCare.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.Service;
 import java.io.*;
 import java.util.*;
 
@@ -32,6 +34,8 @@ public class UserController {
     private AudioService audioService;
     @Autowired
     private ClockService clockService;
+    @Autowired
+    private NewsService newsService;
 
     /**
      * 注册接口
@@ -40,12 +44,8 @@ public class UserController {
      */
     @PostMapping("register")
     public JsonData register(@RequestBody Map<String,String> userInfo ){
-
         int rows = userService.save(userInfo);
-
-
         return rows == 1 ? JsonData.buildSuccess(): JsonData.buildError("注册失败，请重试");
-
     }
 
     /**
@@ -55,7 +55,6 @@ public class UserController {
      */
     @PostMapping("login")
     public JsonData login(@RequestBody LoginRequest loginRequest){
-
         String token = userService.findByPhoneAndPwd(loginRequest.getPhone(), loginRequest.getPwd());
         int id = userService.findIdByPhone(loginRequest.getPhone());
         User user =  userService.findByUserId(id);
@@ -81,21 +80,23 @@ public class UserController {
     }
 
     /**
-     * 根据用户family_id查询拥有同样family_id的人，即家庭的人
+     * 家庭列表
      * @return
      */
     @GetMapping("family")
     public JsonData findUserListByFamilyId(HttpServletRequest request){
 
-        String familyId = (String) request.getAttribute("family_id");
-        Integer userId = (Integer) request.getAttribute("user_id");
+        int id = (Integer) request.getAttribute("user_id");
+        String familyId = userService.getFamilyId(id);
+        if(familyId.equals("0")){
+            return JsonData.buildError("no family");
+        }
 
         if(familyId == null){
             return JsonData.buildError("查询失败");
         }
 
-        List<User> userList = userService.findListFamily(familyId,userId);
-
+        List<User> userList = userService.findListFamily(familyId,id);
         return JsonData.buildSuccess(userList);
     }
 
@@ -107,6 +108,24 @@ public class UserController {
     public JsonData createFamily(@RequestBody Family family, HttpServletRequest request){
         String familyId = userService.createFamily(family.getFamilyName(), (Integer)request.getAttribute("user_id"));
         return JsonData.buildSuccess(familyId);
+    }
+
+    /**
+     * 加入家庭
+     * @param family
+     * @param request
+     * @return
+     */
+    @RequestMapping("join_family")
+    public JsonData joinFamily(@RequestBody Family family, HttpServletRequest request){
+        String familyId = family.getFamilyId();
+        int id = (Integer)request.getAttribute("user_id");
+        if(userService.findFamilyIdExist(familyId) == 1){
+            userService.joinFamily(familyId, id);
+            return JsonData.buildSuccess("成功加入家庭");
+        }else {
+            return JsonData.buildError("此家庭不存在");
+        }
     }
 
     public static String HttpRestClient(String url, HttpMethod method, JSONObject json) throws IOException {
@@ -387,7 +406,63 @@ public class UserController {
     @RequestMapping("news_list")
     public JsonData newsList(HttpServletRequest request){
         int id = (Integer)request.getAttribute("user_id");
+        List<News> news = newsService.showNews();
+        System.out.println(news.toString());
+        return JsonData.buildSuccess(news);
+    }
 
-        return JsonData.buildSuccess();
+    /**
+     * 新闻详情页
+     * @param news
+     * @param request
+     * @return
+     */
+    @RequestMapping("news_details")
+    public JsonData newsDetails(@RequestBody News news, HttpServletRequest request){
+        int newsId = news.getId();
+        int id = (Integer)request.getAttribute("user_id");
+        News news1 = newsService.getDetailNews(newsId);
+        return JsonData.buildSuccess(news1);
+    }
+
+    /**
+     * 播放新闻
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("news_play")
+    public String newsPlay(HttpServletRequest request, HttpServletResponse response){
+        int id = Integer.parseInt(request.getParameter("id"));//从？后获取新闻Id
+        int userId = (Integer) request.getAttribute("user_id");
+        int tone_id = userService.getToneId(userId);
+//        String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+userId+"\\"+newsId+".wav";
+//        String audioUrl = "http://8.131.246.100:8080/headImg/"+tone_id+"/"+newsId+".wav";
+//        String audioUrl = "F:\\FFOutput\\xcz.mp3";
+        String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+tone_id+"\\"+id+".mp3";
+        System.out.println("audioUrl："+audioUrl);
+        try {
+            FileInputStream fis = null;
+            OutputStream os = null ;
+            String urll = audioUrl;
+            fis = new FileInputStream(urll);
+            System.out.println(fis);
+            int size = fis.available(); // 得到文件大小
+            byte data[] = new byte[size];
+            fis.read(data); // 读数据
+            fis.close();
+            fis = null;
+            response.setContentType("audio/mpeg"); // 设置返回的文件类型
+            os = response.getOutputStream();
+            os.write(data);
+            os.flush();
+            os.close();
+            os = null;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

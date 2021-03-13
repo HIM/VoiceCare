@@ -1,6 +1,7 @@
 package voiceCare.service.impl;
 
 import org.springframework.transaction.annotation.Transactional;
+import voiceCare.model.entity.Family;
 import voiceCare.model.entity.User;
 import voiceCare.mapper.UserMapper;
 import voiceCare.service.UserService;
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public String createFamily(String familyName, Integer user_id) {
         String familyId = testNum();
         userMapper.updateFamily(familyId, user_id);
-        userMapper.createFamily(familyId, familyName, user_id);
+        userMapper.createFamily(familyId, familyName);
         return familyId;
     }
 
@@ -92,6 +93,26 @@ public class UserServiceImpl implements UserService {
         userMapper.setStateOn(id);
     }
 
+    @Override
+    public int findFamilyIdExist(String familyId) {
+        Family family = userMapper.findFamilyExist(familyId);
+        if(family == null){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
+    @Override
+    public void joinFamily(String familyId, int id) {
+        userMapper.joinFamily(familyId, id);
+    }
+
+    @Override
+    public String getFamilyId(int id) {
+        return userMapper.getFamilyId(id);
+    }
+
     public String testNum(){
         StringBuilder str=new StringBuilder();//定义变长字符串
         Random random=new Random();
@@ -99,22 +120,6 @@ public class UserServiceImpl implements UserService {
             str.append(random.nextInt(10));
         }
         return str.toString();
-    }
-
-    /**
-     * 新建的familyId给临时的User
-     * @param familyIdObj
-     * @return
-     */
-    private User createFamily(Map<String,String> familyIdObj){
-        if(familyIdObj.containsKey("familyId") && familyIdObj.containsKey("phone")){
-            User user = new User();
-            user.setPhone(familyIdObj.get("phone"));
-            user.setFamilyId(familyIdObj.get("familyId"));
-            return user;
-        }else {
-            return null;
-        }
     }
 
     /**
