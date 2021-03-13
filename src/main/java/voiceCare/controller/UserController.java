@@ -60,12 +60,9 @@ public class UserController {
         int id = userService.findIdByPhone(loginRequest.getPhone());
         User user =  userService.findByUserId(id);
         user.setToken(token);
-        user_s = user;
 //        return token == null ?JsonData.buildError("登录失败，账号密码错误"): JsonData.buildSuccess(token);
         return JsonData.buildSuccess(user);
     }
-
-    public static User user_s;
 
     /**
      * 根据用户id查询用户信息
@@ -74,16 +71,12 @@ public class UserController {
      */
     @GetMapping("find_by_token")
     public JsonData findUserInfoByToken(HttpServletRequest request){
-
         Integer userId = (Integer) request.getAttribute("user_id");
-
         if(userId == null){
             return JsonData.buildError("查询失败");
         }
-
         User user =  userService.findByUserId(userId);
-        user_s = user;
-
+        userService.setStateOn(userId);//强制使用户登录状态为1
         return JsonData.buildSuccess(user);
     }
 
@@ -362,8 +355,38 @@ public class UserController {
         }
         List<Clock> clocks = clockService.showClocks(id);
         System.out.println(clocks.toString());
+        userService.setStateOn(id);//强制使用户登录状态为1
         return JsonData.buildSuccess(clocks);
     }
 
+    /**
+     * 随心听
+     * @param audioWord
+     * @param request
+     * @return
+     */
+    @RequestMapping("listen_word")
+    public JsonData listenWord(@RequestBody AudioWord audioWord, HttpServletRequest request){
+        String word = audioWord.getWord();
+        int id = (Integer)request.getAttribute("user_id");
+        int tone_id = userService.getToneId(id);
+        AudioWord audioWord1 = new AudioWord();
+        audioWord1.setId(id);
+        audioWord1.setToneId(tone_id);
+        audioWord1.setWord(word);
+        String audioWordJson = JSONObject.toJSONString(audioWord1);
+        System.out.println("“随心听”发送给Python: "+audioWordJson);
+        JSONObject postData = JSONObject.parseObject(audioWordJson);  //请求json
+        String url = "http://127.0.0.1:80/bofang";
+        HttpMethod method = HttpMethod.POST;
+        try {
+            String result = UserController.HttpRestClient(url, method,postData);
+            System.out.println("result: "+ result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+
+        return JsonData.buildSuccess(tone_id);
+    }
 }

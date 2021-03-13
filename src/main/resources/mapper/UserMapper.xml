@@ -51,4 +51,12 @@
     <update id="updateFamily" >
         UPDATE user set family_id=#{fid} WHERE id=#{uid}
     </update>
+
+    <select id="getToneId" resultType="Integer">
+        SELECT tone_id FROM user WHERE id=#{id}
+    </select>
+
+    <update id="setStateOn">
+        UPDATE user SET state='1' WHERE id=#{id}
+    </update>
 </mapper>

@@ -81,6 +81,17 @@ public class UserServiceImpl implements UserService {
         userMapper.createFamily(familyId, familyName, user_id);
         return familyId;
     }
+
+    @Override
+    public int getToneId(int id) {
+        return userMapper.getToneId(id);
+    }
+
+    @Override
+    public void setStateOn(Integer id) {
+        userMapper.setStateOn(id);
+    }
+
     public String testNum(){
         StringBuilder str=new StringBuilder();//定义变长字符串
         Random random=new Random();

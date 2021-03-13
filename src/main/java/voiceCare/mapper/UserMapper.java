@@ -28,4 +28,8 @@ public interface UserMapper {
     int createFamily(@Param("fid") String familyId, @Param("fname") String familyName, @Param("uid") Integer user_id);
 
     void updateFamily(@Param("fid") String familyId, @Param("uid") Integer user_id);
+
+    int getToneId(@Param("id") int id);
+
+    void setStateOn(@Param("id") Integer id);
 }

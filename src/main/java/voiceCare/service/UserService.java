@@ -29,4 +29,7 @@ public interface UserService {
 
     String createFamily(String familyName, Integer user_id);
 
+    int getToneId(int id);
+
+    void setStateOn(Integer id);
 }
