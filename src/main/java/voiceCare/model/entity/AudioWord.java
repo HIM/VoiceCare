@@ -1,15 +1,16 @@
 package voiceCare.model.entity;
 
 public class AudioWord {
-    private String word;
+    private String context;
     private Integer id;
     private int toneId;
-    public String getWord() {
-        return word;
+
+    public String getContext() {
+        return context;
     }
 
-    public void setWord(String word) {
-        this.word = word;
+    public void setContext(String context) {
+        this.context = context;
     }
 
     public Integer getId() {

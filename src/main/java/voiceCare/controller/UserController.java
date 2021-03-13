@@ -231,55 +231,6 @@ public class UserController {
     }
 
     /**
-     * 接受未知参数名的多个文件或者一个文件
-     *
-     * @param request 请求
-     * @return 返回
-     */
-    @PostMapping("upload")
-    public JSONObject handleFileUpload(HttpServletRequest request) {
-        Iterator<String> fileNames = ((MultipartHttpServletRequest) request).getFileNames();
-        JSONObject result = null;
-//        int user_id = user_s.getId();
-        int user_id = (Integer) request.getAttribute("user_id");
-        System.out.println("从token中获取Id为："+user_id);
-        while (fileNames.hasNext()) {
-            String next = fileNames.next();
-            MultipartFile file = ((MultipartHttpServletRequest) request).getFile(next);
-            System.out.println("file.getName():" + file.getName());
-            System.out.println("file.getOriginalFilename():" + file.getOriginalFilename());
-            //判断是否有该文件夹，若没有则创建
-            File filee = new File("C:\\VoiceBase\\"+user_id);
-            if( !filee.exists() && !filee.isDirectory()){
-                filee.mkdir();
-            }
-            String folder = "C:\\VoiceBase\\"+user_id+"\\";
-            String picName = new Date().getTime() + ".mp3";
-            File filelocal = new File(folder, picName);
-            result = new JSONObject();
-            result.put(picName, folder + picName);
-            System.out.println("*************存储语音模块结束***********");
-            try {
-                file.transferTo(filelocal);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("error_code", 223805);
-        jsonObject.put("reason", "文件过大或上传发生错误");
-        Random random = new Random();
-        if (random.nextInt(10) > 3) {
-            jsonObject.put("error_code", 0);
-            jsonObject.put("reason", "success");
-
-            jsonObject.put("result", result);
-        }
-        return jsonObject;
-    }
-
-
-    /**
      * 修改音色
      * @param exid
      * @param request
@@ -360,24 +311,24 @@ public class UserController {
     }
 
     /**
-     * 随心听
+     * 随心听 发送
      * @param audioWord
      * @param request
      * @return
      */
     @RequestMapping("listen_word")
-    public JsonData listenWord(@RequestBody AudioWord audioWord, HttpServletRequest request){
-        String word = audioWord.getWord();
+    public JsonData listenWordSend(@RequestBody AudioWord audioWord, HttpServletRequest request){
+        String word = audioWord.getContext();
         int id = (Integer)request.getAttribute("user_id");
         int tone_id = userService.getToneId(id);
         AudioWord audioWord1 = new AudioWord();
         audioWord1.setId(id);
         audioWord1.setToneId(tone_id);
-        audioWord1.setWord(word);
+        audioWord1.setContext(word);
         String audioWordJson = JSONObject.toJSONString(audioWord1);
         System.out.println("“随心听”发送给Python: "+audioWordJson);
         JSONObject postData = JSONObject.parseObject(audioWordJson);  //请求json
-        String url = "http://127.0.0.1:80/bofang";
+        String url = "http://127.0.0.1:80/zdy";
         HttpMethod method = HttpMethod.POST;
         try {
             String result = UserController.HttpRestClient(url, method,postData);
@@ -385,8 +336,58 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return JsonData.buildSuccess("随心听发送并合成成功");
+    }
 
+    /**
+     * 随心听 播放
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("listen_play")
+    public String listenWordPlay(HttpServletRequest request, HttpServletResponse response){
+        Integer userId = (Integer) request.getAttribute("user_id");
 
-        return JsonData.buildSuccess(tone_id);
+        User user =  userService.findByUserId(userId);
+        String audioUrl = user.getAudioUrl();
+        System.out.println("audioUrl= "+audioUrl);
+
+        try {
+            FileInputStream fis = null;
+            OutputStream os = null ;
+
+            String urll = audioUrl;
+            fis = new FileInputStream(urll);
+            System.out.println(fis);
+            int size = fis.available(); // 得到文件大小
+            byte data[] = new byte[size];
+            fis.read(data); // 读数据
+            fis.close();
+            fis = null;
+            response.setContentType("audio/mpeg"); // 设置返回的文件类型
+            os = response.getOutputStream();
+            os.write(data);
+            os.flush();
+            os.close();
+            os = null;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 新闻列表
+     * @param request
+     * @return
+     */
+    @RequestMapping("news_list")
+    public JsonData newsList(HttpServletRequest request){
+        int id = (Integer)request.getAttribute("user_id");
+
+        return JsonData.buildSuccess();
     }
 }
