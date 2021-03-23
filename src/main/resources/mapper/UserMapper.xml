@@ -67,4 +67,8 @@
     <select id="simply" resultType="User">
         SELECT * FROM users WHERE family_id=#{fid} order by age DESC
     </select>
+
+    <select id="getFamilyName" resultType="String">
+        SELECT family_name FROM family WHERE family_id=#{fid}
+    </select>
 </mapper>

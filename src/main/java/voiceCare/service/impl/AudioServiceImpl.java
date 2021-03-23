@@ -32,8 +32,8 @@ public class AudioServiceImpl implements AudioService {
     /**
      * 科大讯飞api key
      */
-    private static final String APP_ID = "5f92b6b6";
-    private static final String SECRET_KEY = "57e6303621c43b0064f54ea07bce2f01";
+    private static final String APP_ID = "6059cee3";
+    private static final String SECRET_KEY = "b7eb7fa92395f8297a8659e54d6580c0";
 
     /**
      * 图灵机器人api key
@@ -50,6 +50,36 @@ public class AudioServiceImpl implements AudioService {
 
 //    @Autowired
 //    private AudioMapper audioMapper;
+
+    public String BaiduAudio2Word(){
+        AipSpeech client = new AipSpeech(B_APP_ID, B_API_KEY, B_SECRET_KEY);
+
+
+        // 调用接口
+        org.json.JSONObject res = client.asr("F:\\WangChen2628\\IDEA\\VoiceCare\\weathergood.mp3", "pcm", 16000, null);
+        System.out.println(res.toString(2));
+        return res.toString(2);
+    }
+    public void asr(AipSpeech client)
+    {
+        // 对本地语音文件进行识别
+//        String path = "D:\\code\\java-sdk\\speech_sdk\\src\\test\\resources\\16k_test.pcm";//F:\WangChen2628\IDEA\VoiceCare\weathergood.mp3
+        String path = "F:\\WangChen2628\\IDEA\\VoiceCare\\weathergood.mp3";
+        org.json.JSONObject asrRes = client.asr(path, "pcm", 16000, null);
+        System.out.println(asrRes);
+
+        // 对语音二进制数据进行识别
+        byte[] data = new byte[0];     //readFileByBytes仅为获取二进制数据示例
+        try {
+            data = Util.readFileByBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        org.json.JSONObject asrRes2 = client.asr(data, "pcm", 16000, null);
+        System.out.println(asrRes2);
+
+    }
+
 
     /**
      * 科大讯飞api LfasrSDK 语音转文字

@@ -40,4 +40,6 @@ public interface UserService {
     String getFamilyId(int id);
 
     List<User> simply(String familyId, int id);
+
+    String getFamilyName(Integer userId);
 }

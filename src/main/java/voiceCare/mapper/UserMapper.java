@@ -41,4 +41,6 @@ public interface UserMapper {
     String getFamilyId(@Param("uid") int id);
 
     List<User> simply(@Param("fid") String familyId, @Param("uid") int id);
+
+    String getFamilyName(@Param("fid") String family_id);
 }

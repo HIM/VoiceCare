@@ -48,6 +48,16 @@ public class User {
 
     private String sex;
 
+    private String familyName;
+
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
     public int getAge() {
         return age;
     }

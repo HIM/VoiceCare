@@ -118,6 +118,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.simply(familyId, id);
     }
 
+    @Override
+    public String getFamilyName(Integer userId) {
+        String family_id = userMapper.getFamilyId(userId);
+        return userMapper.getFamilyName(family_id);
+    }
+
     public String testNum(){
         StringBuilder str=new StringBuilder();//定义变长字符串
         Random random=new Random();

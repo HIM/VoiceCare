@@ -76,6 +76,7 @@ public class UserController {
         }
         User user =  userService.findByUserId(userId);
         userService.setStateOn(userId);//强制使用户登录状态为1
+        user.setFamilyName(userService.getFamilyName(userId));
         return JsonData.buildSuccess(user);
     }
 
@@ -206,12 +207,18 @@ public class UserController {
         System.out.println("chat接口start...");
         Integer userId = (Integer) request.getAttribute("user_id");
         System.out.println("当前用户id："+userId);
-        Thread.sleep(10000);
-        String file = ListenFile.filen;//获取音频地址
-        String AUDIO_FILE_PATH = file;
-
+//        Thread.sleep(10000);
+        /*
+        * 服务器上接收音频文件用FileController
+        * 这里暂时用监听文件夹的方式，监听文件夹：F:\WangChen2628\IDEA
+        *
+        */
+//        String file = ListenFile.filen;//获取音频地址
+//        String AUDIO_FILE_PATH = file;"F:\\WangChen2628\\IDEA"
+        String AUDIO_FILE_PATH = "F:\\WangChen2628\\IDEA\\VoiceCare\\weathergood.mp3";
         String AUDIO_WORD_RESULT = audioService.audio2word(AUDIO_FILE_PATH);
-        String TURING_WORD_RESULT = audioService.word2word(AUDIO_WORD_RESULT);
+//        String TURING_WORD_RESULT = audioService.word2word(AUDIO_WORD_RESULT);
+        String TURING_WORD_RESULT = audioService.word2word("今天天气怎么样");
         String AUDIO_URL = audioService.word2Audio(TURING_WORD_RESULT);
         System.out.println("AUDIO_URL："+AUDIO_URL);
         return null;
@@ -485,5 +492,56 @@ public class UserController {
         return JsonData.buildSuccess(userList);
     }
 
+    /**
+     * 简洁模式下点头像播放
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("simply_play")
+    public String simplyPlay(HttpServletRequest request, HttpServletResponse response){
+        int tone_id = Integer.parseInt(request.getParameter("id"));//从？后获取新闻Id
+//        int userId = (Integer) request.getAttribute("user_id");
+//        int tone_id = userService.getToneId(userId);
+//        String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+userId+"\\"+newsId+".wav";
+//        String audioUrl = "http://8.131.246.100:8080/headImg/"+tone_id+"/"+newsId+".wav";
+//        String audioUrl = "F:\\FFOutput\\xcz.mp3";
+        String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+tone_id+"\\"+(int)(Math.random()*10+1)+".mp3";
+        System.out.println("audioUrl："+audioUrl);
+        try {
+            FileInputStream fis = null;
+            OutputStream os = null ;
+            String urll = audioUrl;
+            fis = new FileInputStream(urll);
+            System.out.println(fis);
+            int size = fis.available(); // 得到文件大小
+            byte data[] = new byte[size];
+            fis.read(data); // 读数据
+            fis.close();
+            fis = null;
+            response.setContentType("audio/mpeg"); // 设置返回的文件类型
+            os = response.getOutputStream();
+            os.write(data);
+            os.flush();
+            os.close();
+            os = null;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("chat_test")
+    public JSONObject chatTest(){
+        try {
+            JSONObject info = FileTransJava.getInfo();
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JSONObject.parseObject("");
+    }
 
 }
