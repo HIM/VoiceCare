@@ -39,4 +39,6 @@ public interface UserMapper {
     void joinFamily(@Param("fid") String familyId, @Param("uid") int id);
 
     String getFamilyId(@Param("uid") int id);
+
+    List<User> simply(@Param("fid") String familyId, @Param("uid") int id);
 }

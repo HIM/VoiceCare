@@ -481,7 +481,9 @@ public class UserController {
         if(familyId == null){
             return JsonData.buildError("查询失败");
         }
-        List<User> userList = userService.findListFamily(familyId,id);
+        List<User> userList = userService.simply(familyId,id);
         return JsonData.buildSuccess(userList);
     }
+
+
 }

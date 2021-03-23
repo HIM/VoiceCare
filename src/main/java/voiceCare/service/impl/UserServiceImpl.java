@@ -113,6 +113,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.getFamilyId(id);
     }
 
+    @Override
+    public List<User> simply(String familyId, int id) {
+        return userMapper.simply(familyId, id);
+    }
+
     public String testNum(){
         StringBuilder str=new StringBuilder();//定义变长字符串
         Random random=new Random();

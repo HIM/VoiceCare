@@ -38,4 +38,6 @@ public interface UserService {
     void joinFamily(String familyId, int id);
 
     String getFamilyId(int id);
+
+    List<User> simply(String familyId, int id);
 }

@@ -63,4 +63,8 @@
     <select id="getFamilyId" resultType="String">
         SELECT family_id FROM users WHERE id=#{uid}
     </select>
+    
+    <select id="simply" resultType="User">
+        SELECT * FROM users WHERE family_id=#{fid} order by age DESC
+    </select>
 </mapper>
