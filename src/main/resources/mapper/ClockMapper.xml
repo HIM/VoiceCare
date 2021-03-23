@@ -22,15 +22,15 @@
     </select>
 
     <update id="loginInState">
-        UPDATE user SET state='1' WHERE id=#{id}
+        UPDATE users SET state='1' WHERE id=#{id}
     </update>
 
     <update id="quitState">
-        UPDATE user SET state='0' WHERE id=#{id}
+        UPDATE users SET state='0' WHERE id=#{id}
     </update>
 
     <select id="findLoginUser" resultType="User">
-        SELECT * FROM user WHERE state='1'
+        SELECT * FROM users WHERE state='1'
     </select>
 
     <select id="findLoginUserClock" resultType="Clock">

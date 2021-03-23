@@ -4,7 +4,7 @@
 
     <!--注册，insert；values取User对象的属性-->
     <insert id="save" parameterType="User">
-        INSERT  INTO user (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
+        INSERT  INTO users (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
         values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 0, #{headImg,jdbcType=VARCHAR},
         #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},'0')
     </insert>
@@ -12,28 +12,28 @@
 
     <!--根据手机号和密码找用户-->
     <select id="findByPhoneAndPwd" resultType="User">
-        select  * from user where phone =#{phone} and pwd = #{pwd}
+        select  * from users where phone =#{phone} and pwd = #{pwd}
     </select>
 
     <select id="findByUserId" resultType="User">
-      select  * from user where id=#{user_id}
+      select  * from users where id=#{user_id}
     </select>
 
     <select id="findListFamily" resultType="User">
-        select * from user where family_id=#{family_id} order by create_time desc
+        select * from users where family_id=#{family_id} order by create_time desc
     </select>
 
 
     <update id="exchangeToneId">
-        update user set tone_id=#{post_id} where id=#{user_id}
+        update users set tone_id=#{post_id} where id=#{user_id}
     </update>
 
     <select id="findIdByPhone" resultType="Integer">
-        select id from user where phone=#{phone}
+        select id from users where phone=#{phone}
     </select>
 
     <update id="uploadHeadImgUrl" >
-        update user set head_img=#{img_url} where id=#{id}
+        update users set head_img=#{img_url} where id=#{id}
     </update>
 
     <insert id="createFamily">
@@ -41,15 +41,15 @@
     </insert>
 
     <update id="updateFamily" >
-        UPDATE user set family_id=#{fid} WHERE id=#{uid}
+        UPDATE users set family_id=#{fid} WHERE id=#{uid}
     </update>
 
     <select id="getToneId" resultType="Integer">
-        SELECT tone_id FROM user WHERE id=#{id}
+        SELECT tone_id FROM users WHERE id=#{id}
     </select>
 
     <update id="setStateOn">
-        UPDATE user SET state='1' WHERE id=#{id}
+        UPDATE users SET state='1' WHERE id=#{id}
     </update>
 
     <select id="findFamilyExist" resultType="Family">
@@ -57,10 +57,10 @@
     </select>
     
     <update id="joinFamily">
-        UPDATE user SET family_id=#{fid} WHERE id=#{uid}
+        UPDATE users SET family_id=#{fid} WHERE id=#{uid}
     </update>
 
     <select id="getFamilyId" resultType="String">
-        SELECT family_id FROM user WHERE id=#{uid}
+        SELECT family_id FROM users WHERE id=#{uid}
     </select>
 </mapper>

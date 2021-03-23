@@ -465,4 +465,23 @@ public class UserController {
         }
         return null;
     }
+
+    /**
+     * 切换简洁模式
+     * @param request
+     * @return
+     */
+    @RequestMapping("role_play")
+    public JsonData selectRole(HttpServletRequest request){
+        int id = (Integer) request.getAttribute("user_id");
+        String familyId = userService.getFamilyId(id);
+        if(familyId.equals("0")){
+            return JsonData.buildError("no family");
+        }
+        if(familyId == null){
+            return JsonData.buildError("查询失败");
+        }
+        List<User> userList = userService.findListFamily(familyId,id);
+        return JsonData.buildSuccess(userList);
+    }
 }
