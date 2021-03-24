@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,9 @@ import springfox.documentation.spring.web.json.Json;
 import voiceCare.config.AudioTransWord;
 import voiceCare.model.entity.AudioTransWord.AliJson;
 import voiceCare.model.entity.AudioTransWord.Sentences;
+import voiceCare.model.entity.AudioWord;
 import voiceCare.model.entity.User;
+import voiceCare.service.AudioService;
 import voiceCare.service.UserService;
 import voiceCare.utils.JsonData;
 
@@ -33,6 +36,8 @@ public class FileController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AudioService audioService;
 
     /**
      * 语音文件上传
@@ -126,21 +131,27 @@ public class FileController {
             System.out.println("file.getOriginalFilename():" + file.getOriginalFilename());
 
             //判断是否有该文件夹，若没有则创建
-            File filee = new File("C:\\VoiceBase\\chat\\"+id);
+            File filee = new File("C:\\Develop\\apache-tomcat-8.5.31\\webapps\\headImg\\chat\\"+id);
             if( !filee.exists() && !filee.isDirectory()){
                 filee.mkdir();
             }
-            String folder = "C:\\VoiceBase\\chat\\"+id+"\\";
+            String folder = "C:\\Develop\\apache-tomcat-8.5.31\\webapps\\headImg\\chat\\"+id+"\\";
 
             String picName = new Date().getTime() + ".wav";
             File filelocal = new File(folder, picName);
             result = new JSONObject();
             result.put(picName, folder + picName);
+            try {
+                file.transferTo(filelocal);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             /**
              * 阿里云 语音转文字
              */
             AudioTransWord audioTransWord = new AudioTransWord();
-            audioTransWord.setUrl(picName);//音频文件地址
+            String audiourl = "http://8.131.246.100:8080/headImg/chat/"+picName;
+            audioTransWord.setUrl(audiourl);//音频文件地址
             AliJson aliJson = null;
             try {
                 aliJson = JSON.toJavaObject(audioTransWord.getInfo(), AliJson.class);
@@ -148,15 +159,29 @@ public class FileController {
                 e.printStackTrace();
             }
             Sentences[] sentences = aliJson.getResult().getSentences();
-            String text = sentences[0].getText();
+            String text = sentences[0].getText();   //获取用户说的话
             System.out.println("用户"+id+"说了："+text);
 
+            String TURING_WORD_RESULT = audioService.word2word(text);   //图灵机器人返回值"
+            System.out.println("图灵机器人说："+TURING_WORD_RESULT);
+
+            int tone_id = userService.getToneId(id);
+            AudioWord audioWord1 = new AudioWord();
+            audioWord1.setId(id);
+            audioWord1.setToneId(tone_id);
+            audioWord1.setContext(text);
+            String audioWordJson = JSONObject.toJSONString(audioWord1);
+            System.out.println("“聊天”发送给Python: "+audioWordJson);
+            JSONObject postData = JSONObject.parseObject(audioWordJson);  //请求json
+            String url = "http://127.0.0.1:80/zdy";
+            HttpMethod method = HttpMethod.POST;
             try {
-                file.transferTo(filelocal);
+                String res = UserController.HttpRestClient(url, method,postData);
+                System.out.println("result: "+ res);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return JsonData.buildSuccess("语音文件上传成功");
+        return JsonData.buildSuccess("音频处理成功");
     }
 }
