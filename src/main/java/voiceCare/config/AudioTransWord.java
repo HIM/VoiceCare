@@ -1,4 +1,4 @@
-package voiceCare.controller;
+package voiceCare.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonRequest;
@@ -7,7 +7,7 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-public class FileTransJava {
+public class AudioTransWord {
     /**
      * 地域ID 常量内容，请勿改变
      */
@@ -27,9 +27,13 @@ public class FileTransJava {
     public static final String KEY_TASK_ID = "TaskId";
     public static final String KEY_STATUS_TEXT = "StatusText";
 
+//    String audioUrl = "http://8.131.246.100:8080/headImg/d8.wav";
+    String audioUrl;
+    public void setUrl(String url){
+        audioUrl = url;
+    }
 
-
-    public static JSONObject getInfo() throws Exception{
+    public  JSONObject getInfo() throws Exception{
        /* if (args.length < 3) {
             System.err.println("FileTransJavaDemo need params: <AccessKey Id> <AccessKey Secret> <app-key>");
         }*/
@@ -63,8 +67,10 @@ public class FileTransJava {
         JSONObject taskObject = new JSONObject();
         // 设置app_key
         taskObject.put(KEY_APP_KEY, appKey);
-        // 设置音频文件访问链接
-        taskObject.put(KEY_FILE_LINK, "http://8.131.246.100:8080/headImg/d2.wav");
+        /**
+         * 设置音频文件访问链接
+          */
+        taskObject.put(KEY_FILE_LINK, audioUrl);
         String task = taskObject.toJSONString();
         // 设置以上JOSN字符串为Body参数
         postRequest.putBodyParameter(KEY_TASK, task);

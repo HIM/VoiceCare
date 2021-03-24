@@ -1,13 +1,13 @@
 package voiceCare.controller;
 
-import io.swagger.models.auth.In;
+import com.alibaba.fastjson.JSON;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import voiceCare.config.ListenFile;
+import voiceCare.config.AudioTransWord;
 import voiceCare.model.entity.*;
+import voiceCare.model.entity.AudioTransWord.AliJson;
+import voiceCare.model.entity.AudioTransWord.Sentences;
 import voiceCare.model.request.LoginRequest;
 import voiceCare.service.AudioService;
 import voiceCare.service.ClockService;
@@ -20,7 +20,6 @@ import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.Service;
 import java.io.*;
 import java.util.*;
 
@@ -533,15 +532,20 @@ public class UserController {
         return null;
     }
 
-    @RequestMapping("chat_test")
-    public JSONObject chatTest(){
+    @RequestMapping("chat_receive")
+    public String chatTest(){
         try {
-            JSONObject info = FileTransJava.getInfo();
-            return info;
+            AudioTransWord audioTransWord = new AudioTransWord();
+            audioTransWord.setUrl("http://8.131.246.100:8080/headImg/d8.wav");
+            AliJson aliJson = JSON.toJavaObject(audioTransWord.getInfo(),AliJson.class);
+            Sentences[] sentences = aliJson.getResult().getSentences();
+            String text = sentences[0].getText();
+            System.out.println(text);
+            return text;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return JSONObject.parseObject("");
+        return "";
     }
 
 }

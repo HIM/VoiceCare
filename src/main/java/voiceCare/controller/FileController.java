@@ -1,5 +1,6 @@
 package voiceCare.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import springfox.documentation.spring.web.json.Json;
+import voiceCare.config.AudioTransWord;
+import voiceCare.model.entity.AudioTransWord.AliJson;
+import voiceCare.model.entity.AudioTransWord.Sentences;
 import voiceCare.model.entity.User;
 import voiceCare.service.UserService;
 import voiceCare.utils.JsonData;
@@ -104,4 +108,55 @@ public class FileController {
         return JsonData.buildSuccess("头像上传成功");
     }
 
+    /**
+     * 聊天，接收音频文件
+     * @param request 请求
+     * @return 返回
+     */
+    @PostMapping("chat_upload")
+    public JsonData ChatFileUpload(HttpServletRequest request) {
+        System.out.println("当前用户"+request.getParameter("id")+"发起了聊天..");
+        int id = Integer.parseInt(request.getParameter("id"));
+        Iterator<String> fileNames = ((MultipartHttpServletRequest) request).getFileNames();
+        JSONObject result = null;
+        while (fileNames.hasNext()) {
+            String next = fileNames.next();
+            MultipartFile file = ((MultipartHttpServletRequest) request).getFile(next);
+            System.out.println("file.getName():" + file.getName());
+            System.out.println("file.getOriginalFilename():" + file.getOriginalFilename());
+
+            //判断是否有该文件夹，若没有则创建
+            File filee = new File("C:\\VoiceBase\\chat\\"+id);
+            if( !filee.exists() && !filee.isDirectory()){
+                filee.mkdir();
+            }
+            String folder = "C:\\VoiceBase\\chat\\"+id+"\\";
+
+            String picName = new Date().getTime() + ".wav";
+            File filelocal = new File(folder, picName);
+            result = new JSONObject();
+            result.put(picName, folder + picName);
+            /**
+             * 阿里云 语音转文字
+             */
+            AudioTransWord audioTransWord = new AudioTransWord();
+            audioTransWord.setUrl(picName);//音频文件地址
+            AliJson aliJson = null;
+            try {
+                aliJson = JSON.toJavaObject(audioTransWord.getInfo(), AliJson.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Sentences[] sentences = aliJson.getResult().getSentences();
+            String text = sentences[0].getText();
+            System.out.println("用户"+id+"说了："+text);
+
+            try {
+                file.transferTo(filelocal);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return JsonData.buildSuccess("语音文件上传成功");
+    }
 }
