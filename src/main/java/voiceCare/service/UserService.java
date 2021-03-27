@@ -42,4 +42,8 @@ public interface UserService {
     List<User> simply(String familyId, int id);
 
     String getFamilyName(Integer userId);
+
+    void changeAudUrl(int id, String audioUrl);
+
+    void saveRecord(int id, int tone_id, String s, String text);
 }

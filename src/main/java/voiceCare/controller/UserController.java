@@ -1,6 +1,8 @@
 package voiceCare.controller;
 
 import com.alibaba.fastjson.JSON;
+import it.sauronsoftware.jave.AudioAttributes;
+import it.sauronsoftware.jave.EncodingAttributes;
 import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -58,6 +60,7 @@ public class UserController {
         int id = userService.findIdByPhone(loginRequest.getPhone());
         User user =  userService.findByUserId(id);
         user.setToken(token);
+        user.setFamilyName(userService.getFamilyName(id));
 //        return token == null ?JsonData.buildError("登录失败，账号密码错误"): JsonData.buildSuccess(token);
         return JsonData.buildSuccess(user);
     }
@@ -214,12 +217,13 @@ public class UserController {
         */
 //        String file = ListenFile.filen;//获取音频地址
 //        String AUDIO_FILE_PATH = file;"F:\\WangChen2628\\IDEA"
-        String AUDIO_FILE_PATH = "F:\\WangChen2628\\IDEA\\VoiceCare\\weathergood.mp3";
+        String AUDIO_FILE_PATH = "F:\\Code\\1.wav";
         String AUDIO_WORD_RESULT = audioService.audio2word(AUDIO_FILE_PATH);
+        System.out.println(AUDIO_WORD_RESULT);
 //        String TURING_WORD_RESULT = audioService.word2word(AUDIO_WORD_RESULT);
-        String TURING_WORD_RESULT = audioService.word2word("今天天气怎么样");
-        String AUDIO_URL = audioService.word2Audio(TURING_WORD_RESULT);
-        System.out.println("AUDIO_URL："+AUDIO_URL);
+//        String TURING_WORD_RESULT = audioService.word2word("今天天气怎么样");
+//        String AUDIO_URL = audioService.word2Audio(TURING_WORD_RESULT);
+//        System.out.println("AUDIO_URL："+AUDIO_URL);
         return null;
     }
 
@@ -266,8 +270,7 @@ public class UserController {
 
         int id = exid.getId();
         Integer userId = (Integer) request.getAttribute("user_id");
-        System.out.println("post传过来是："+id);
-        System.out.println("request查到的是："+userId);
+        System.out.println("用户"+userId+"切换成了"+id+"的声音");
         if(userId == null){
             return JsonData.buildError("查询失败");
         }
@@ -500,11 +503,6 @@ public class UserController {
     @RequestMapping("simply_play")
     public String simplyPlay(HttpServletRequest request, HttpServletResponse response){
         int tone_id = Integer.parseInt(request.getParameter("id"));//从？后获取新闻Id
-//        int userId = (Integer) request.getAttribute("user_id");
-//        int tone_id = userService.getToneId(userId);
-//        String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+userId+"\\"+newsId+".wav";
-//        String audioUrl = "http://8.131.246.100:8080/headImg/"+tone_id+"/"+newsId+".wav";
-//        String audioUrl = "F:\\FFOutput\\xcz.mp3";
         String audioUrl = "C:\\Users\\Administrator\\Desktop\\news_audio\\tacotron_inference_output\\"+tone_id+"\\"+(int)(Math.random()*10+1)+".mp3";
         System.out.println("audioUrl："+audioUrl);
         try {
@@ -532,15 +530,24 @@ public class UserController {
         return null;
     }
 
+    /**
+     * 不部署至服务器  音频转文字 阿里云
+     * @return
+     */
     @RequestMapping("chat_receive")
     public String chatTest(){
         try {
             AudioTransWord audioTransWord = new AudioTransWord();
-            audioTransWord.setUrl("http://8.131.246.100:8080/headImg/d8.wav");
+//            audioTransWord.setUrl("http://8.131.246.100:8080/headImg/12.wav");
+            audioTransWord.setUrl("http://8.131.246.100:8080/headImg/chat/12s.wav");
             AliJson aliJson = JSON.toJavaObject(audioTransWord.getInfo(),AliJson.class);
             Sentences[] sentences = aliJson.getResult().getSentences();
             String text = sentences[0].getText();
             System.out.println(text);
+
+//            String TURING_WORD_RESULT = audioService.word2word(text);   //图灵机器人返回值"
+//            System.out.println(TURING_WORD_RESULT);
+
             return text;
         } catch (Exception e) {
             e.printStackTrace();

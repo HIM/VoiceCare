@@ -43,4 +43,8 @@ public interface UserMapper {
     List<User> simply(@Param("fid") String familyId, @Param("uid") int id);
 
     String getFamilyName(@Param("fid") String family_id);
+
+    void changeAudUrl(@Param("uid") int id, @Param("url") String audioUrl);
+
+    void saveRecord(@Param("uid") int id, @Param("tid") int tone_id, @Param("judge") String s, @Param("text") String text, @Param("format") String format);
 }

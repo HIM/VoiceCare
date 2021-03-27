@@ -203,20 +203,20 @@ public class AudioServiceImpl implements AudioService {
             JSONObject object = JSON.parseObject(message.getData());
             status = object.getInteger("status");
             System.out.println(message.getData());
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(5);
         }
         //4、获取结果
         Message result = lfasrClient.getResult(taskId);
         System.out.println("转写结果: \n" + result.getData());
 
         //5、fastjson获取其中要说的text
-        String text = result.getData();
-        String txt = text.substring(1,text.length()-1);
-        KeDa keDa = JSON.parseObject(txt, KeDa.class);
-        String realtext = keDa.getOnebest();
+//        String text = result.getData();
+//        String txt = text.substring(1,text.length()-1);
+//        KeDa keDa = JSON.parseObject(txt, KeDa.class);
+//        String realtext = keDa.getOnebest();
 
-        return realtext;
-
+//        return realtext;
+            return result.getData();
         //退出程序，关闭线程资源，仅在测试main方法时使用。
 //        System.exit(0);
     }

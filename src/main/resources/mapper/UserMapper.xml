@@ -5,7 +5,7 @@
     <!--注册，insert；values取User对象的属性-->
     <insert id="save" parameterType="User">
         INSERT  INTO users (name, pwd, record_aud, tone_id, head_img, phone , create_time, family_id)
-        values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 0, #{headImg,jdbcType=VARCHAR},
+        values (#{name,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, '0', 2, #{headImg,jdbcType=VARCHAR},
         #{phone,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},'0')
     </insert>
 
@@ -71,4 +71,12 @@
     <select id="getFamilyName" resultType="String">
         SELECT family_name FROM family WHERE family_id=#{fid}
     </select>
+
+    <update id="changeAudUrl" >
+        UPDATE users SET audio_url=#{url} WHERE id=#{uid}
+    </update>
+
+    <insert id="saveRecord" >
+        INSERT INTO chatrecord VALUES (#{uid}, #{tid}, #{judge}, #{text}, #{format})
+    </insert>
 </mapper>

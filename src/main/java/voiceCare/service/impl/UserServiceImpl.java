@@ -10,6 +10,7 @@ import voiceCare.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -18,6 +19,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     //注入userMapper
+
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 
     @Override
     public int save(Map<String, String> userInfo) {     //通过phone查重，同一手机号不能注册多次
@@ -122,6 +125,16 @@ public class UserServiceImpl implements UserService {
     public String getFamilyName(Integer userId) {
         String family_id = userMapper.getFamilyId(userId);
         return userMapper.getFamilyName(family_id);
+    }
+
+    @Override
+    public void changeAudUrl(int id, String audioUrl) {
+        userMapper.changeAudUrl(id, audioUrl);
+    }
+
+    @Override
+    public void saveRecord(int id, int tone_id, String s, String text) {
+        userMapper.saveRecord(id,tone_id, s, text, df.format(new Date()));
     }
 
     public String testNum(){
