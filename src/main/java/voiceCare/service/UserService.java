@@ -1,5 +1,6 @@
 package voiceCare.service;
 
+import voiceCare.model.entity.ChatRecord;
 import voiceCare.model.entity.User;
 
 import java.util.List;
@@ -46,4 +47,6 @@ public interface UserService {
     void changeAudUrl(int id, String audioUrl);
 
     void saveRecord(int id, int tone_id, String s, String text);
+
+    List<ChatRecord> findChatRecord(int id);
 }

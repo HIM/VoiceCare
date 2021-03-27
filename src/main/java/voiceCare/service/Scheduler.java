@@ -31,8 +31,8 @@ public class Scheduler {
         if(userList!=null){
             for(User user : userList){
                 String nowTime = df.format(new Date());
-                System.out.println("当前时间："+nowTime);
-                System.out.println("当前登录的用户有："+user.getId());
+//                System.out.println("当前时间："+nowTime);
+//                System.out.println("当前登录的用户有："+user.getId());
                 List<Clock> clockList = clockService.findLoginUserClock(user.getId());
                 for(Clock clock : clockList){
                     /**

@@ -79,4 +79,12 @@
     <insert id="saveRecord" >
         INSERT INTO chatrecord VALUES (#{uid}, #{tid}, #{judge}, #{text}, #{format})
     </insert>
+
+    <select id="findChatRecord" resultType="ChatRecord">
+        SELECT * FROM chatrecord WHERE user_id=#{uid} AND judge=#{judge}
+    </select>
+    
+    <select id="findChatRec" resultType="ChatRecord">
+        SELECT * FROM chatrecord WHERE for_id=#{fid} AND judge=#{judge}
+    </select>
 </mapper>

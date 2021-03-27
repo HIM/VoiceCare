@@ -1,6 +1,7 @@
 package voiceCare.mapper;
 
 import io.swagger.models.auth.In;
+import voiceCare.model.entity.ChatRecord;
 import voiceCare.model.entity.Family;
 import voiceCare.model.entity.User;
 import org.apache.ibatis.annotations.Param;
@@ -47,4 +48,9 @@ public interface UserMapper {
     void changeAudUrl(@Param("uid") int id, @Param("url") String audioUrl);
 
     void saveRecord(@Param("uid") int id, @Param("tid") int tone_id, @Param("judge") String s, @Param("text") String text, @Param("format") String format);
+
+
+    List<ChatRecord> findChatRecord(@Param("uid") int id, @Param("judge") String s);
+
+    List<ChatRecord> findChatRec(@Param("fid") int id, @Param("judge") String s);
 }

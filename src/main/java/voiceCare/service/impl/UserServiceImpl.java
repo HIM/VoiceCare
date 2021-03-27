@@ -1,6 +1,7 @@
 package voiceCare.service.impl;
 
 import org.springframework.transaction.annotation.Transactional;
+import voiceCare.model.entity.ChatRecord;
 import voiceCare.model.entity.Family;
 import voiceCare.model.entity.User;
 import voiceCare.mapper.UserMapper;
@@ -135,6 +136,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveRecord(int id, int tone_id, String s, String text) {
         userMapper.saveRecord(id,tone_id, s, text, df.format(new Date()));
+    }
+
+    @Override
+    public List<ChatRecord> findChatRecord(int id) {
+        List<ChatRecord> chatRecords = userMapper.findChatRecord(id,"1");
+        List<ChatRecord> record2 = userMapper.findChatRec(id, "0");
+        chatRecords.addAll(record2);
+        return chatRecords;
     }
 
     public String testNum(){

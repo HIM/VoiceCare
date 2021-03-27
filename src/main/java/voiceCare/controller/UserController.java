@@ -555,4 +555,16 @@ public class UserController {
         return "";
     }
 
+    /**
+     * 聊天记录
+     * @param request
+     * @return
+     */
+    @RequestMapping("chat_record")
+    public JsonData chatRecord(HttpServletRequest request){
+        int id = (Integer)request.getAttribute("user_id");
+        List<ChatRecord> chatRecords = userService.findChatRecord(id);
+        return JsonData.buildSuccess(chatRecords);
+    }
+
 }
